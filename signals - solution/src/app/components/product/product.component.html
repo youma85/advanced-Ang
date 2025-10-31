@@ -1,0 +1,33 @@
+<!--
+  Product Card Template
+  This template displays a single product with its details
+-->
+<div class="product-card">
+  <div class="product-header">
+    <h3>{{ product().name }}</h3>
+    <span class="product-price">{{ product().price | currency:'EUR' }}</span>
+  </div>
+
+  <div class="product-body">
+    <p class="product-total">
+      Subtotal: <strong>{{ product().price * product().quantity | currency:'EUR' }}</strong>
+    </p>
+  </div>
+
+  <div class="product-footer">
+    <div class="quantity-control">
+      <button
+        class="btn btn-secondary"
+        (click)="decrement()"
+        [disabled]="product().quantity === 0">
+        -
+      </button>
+      <span class="quantity">{{ product().quantity }}</span>
+      <button
+        class="btn btn-primary"
+        (click)="increment()">
+        +
+      </button>
+    </div>
+  </div>
+</div>
