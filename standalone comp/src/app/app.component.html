@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+  <app-welcome></app-welcome>
+
+  <div class="input-section">
+    <label for="messageInput">Enter a message:</label>
+    <input
+      id="messageInput"
+      type="text"
+      [(ngModel)]="message"
+      placeholder="Type something..."
+    />
+    <p *ngIf="message">You typed: <strong>{{ message }}</strong></p>
+  </div>
+</div>

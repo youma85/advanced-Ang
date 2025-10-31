@@ -1,0 +1,18 @@
+.welcome-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-box h2 {
+  margin: 0 0 15px 0;
+}
+
+.welcome-box p {
+  margin: 0;
+  background-color: transparent;
+  padding: 0;
+}
