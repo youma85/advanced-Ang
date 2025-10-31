@@ -1,0 +1,43 @@
+<div class="container">
+  <header>
+    <h1>🛒 Product Dashboard</h1>
+    <p class="subtitle">Angular Signals Exercise - Manage your cart with reactive signals</p>
+  </header>
+
+  <!-- Summary Section -->
+  <!-- TODO: These should automatically update when products change (thanks to computed signals) -->
+  <div class="summary">
+    <div class="summary-card">
+      <h3>Total Items</h3>
+      <div class="value">{{ totalItems() }}</div>
+    </div>
+    <div class="summary-card">
+      <h3>Total Price</h3>
+      <div class="value">{{ totalPrice() | currency:'EUR' }}</div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid">
+    <!--
+      TODO: Verify the event binding is working
+      Each product component should emit quantityChanged events
+      The parent (AppComponent) should handle these via onQuantityChange()
+    -->
+    @for (product of products(); track product.id) {
+      <app-product
+        [product]="product"
+        (quantityChanged)="onQuantityChange($event)">
+      </app-product>
+    }
+  </div>
+
+  <!-- Instructions for Bonus Section -->
+  <div class="bonus-section">
+    <h3>🎯 Bonus Challenge</h3>
+    <p>Implement RxJS Interop by loading products from the ProductService Observable.</p>
+    <button class="btn-load" (click)="loadProductsFromService()">
+      Load Products from Service
+    </button>
+  </div>
+</div>
