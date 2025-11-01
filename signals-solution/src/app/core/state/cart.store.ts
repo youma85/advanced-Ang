@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { Product } from '../models/product.model';
 
 @Injectable({
@@ -13,6 +13,14 @@ export class CartStore {
   ]);
 
   products = this._products.asReadonly();
+
+  totalItems = computed(() =>
+    this._products().reduce((sum, product) => sum + (product.quantity || 0), 0)
+  );
+
+  totalPrice = computed(() =>
+    this._products().reduce((sum, product) => sum + (product.price * (product.quantity || 0)), 0)
+  );
 
   incrementQuantity(productId: number): void {
     this._products.update(products =>
