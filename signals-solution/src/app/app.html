@@ -7,7 +7,9 @@
   <main>
     <section class="products-section">
       <h2>Products</h2>
-      <app-product />
+      @for (product of store.products(); track product.id) {
+        <app-product [product]="product" (increase)="store.incrementQuantity($event)" />
+      }
     </section>
 
     <section class="cart-section">

@@ -1,26 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { CartStore } from '../../core/state/cart.store';
+import { Product } from '../../core/models/product.model';
 
 @Component({
   selector: 'app-product',
   imports: [CurrencyPipe],
   template: `
-    <ul>
-      @for (product of store.products(); track product.id) {
-        <li>
-          {{ product.name }} - {{ product.price | currency }} (Quantity: {{ product.quantity }})
-          <button (click)="store.incrementQuantity(product.id)">+</button>
-        </li>
-      }
-    </ul>
+    <div class="product-item">
+      <span>{{ product().name }} - {{ product().price | currency }} (Quantity: {{ product().quantity }})</span>
+      <button (click)="increase.emit(product().id)">+</button>
+    </div>
   `,
   styles: `
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
+    .product-item {
       margin-bottom: 0.5rem;
       padding: 0.5rem;
       border: 1px solid #ddd;
@@ -43,5 +35,6 @@ import { CartStore } from '../../core/state/cart.store';
   `
 })
 export class ProductComponent {
-  store = inject(CartStore);
+  product = input.required<Product>();
+  increase = output<number>();
 }
