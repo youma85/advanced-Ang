@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 import { Product } from '../models/product.model';
 
 @Injectable({
@@ -21,6 +21,14 @@ export class CartStore {
   totalPrice = computed(() =>
     this._products().reduce((sum, product) => sum + (product.price * (product.quantity || 0)), 0)
   );
+
+  constructor() {
+    effect(() => {
+      const items = this.totalItems();
+      const price = this.totalPrice();
+      console.log(`[CartStore] Total changed: ${items} items, ${price.toFixed(2)} €`);
+    });
+  }
 
   incrementQuantity(productId: number): void {
     this._products.update(products =>
