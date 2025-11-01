@@ -1,16 +1,19 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Product } from '../models/product.model';
+import { ProductService } from '../services/product.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartStore {
-  private _products = signal<Product[]>([
-    { id: 1, name: 'Laptop', price: 999.99, quantity: 1 },
-    { id: 2, name: 'Mouse', price: 29.99, quantity: 2 },
-    { id: 3, name: 'Keyboard', price: 79.99, quantity: 1 },
-    { id: 4, name: 'Monitor', price: 299.99, quantity: 1 }
-  ]);
+  private productService = inject(ProductService);
+
+  private _products = signal<Product[]>([]);
+
+  private loadedProducts = toSignal(this.productService.getProducts$(), {
+    initialValue: []
+  });
 
   products = this._products.asReadonly();
 
@@ -27,6 +30,13 @@ export class CartStore {
       const items = this.totalItems();
       const price = this.totalPrice();
       console.log(`[CartStore] Total changed: ${items} items, ${price.toFixed(2)} €`);
+    });
+
+    effect(() => {
+      const products = this.loadedProducts();
+      if (products.length > 0) {
+        this._products.set(products);
+      }
     });
   }
 

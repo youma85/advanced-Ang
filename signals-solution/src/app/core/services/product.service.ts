@@ -8,7 +8,10 @@ import { Product } from '../models/product.model';
 export class ProductService {
 
   getProducts$(): Observable<Product[]> {
-    // Simulate API call - will be implemented later
-    return of([]);
+    return of([
+      { id: 1, name: 'Laptop', price: 999.99, quantity: 1 },
+      { id: 2, name: 'Mouse', price: 29.99, quantity: 2 },
+      { id: 3, name: 'Keyboard', price: 79.99, quantity: 1 }
+    ]);
   }
 }
