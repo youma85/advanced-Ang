@@ -1,17 +1,16 @@
 <div class="container">
   <h1>{{ title }}</h1>
 
-  <!-- Exercise 1: Replace *ngIf with @if -->
+  <!-- Exercise 1: @if with @else -->
   <section class="section">
     <h2>Login Status</h2>
-    <div *ngIf="isLoggedIn">
+    @if (isLoggedIn) {
       <p class="success">✓ You are logged in!</p>
       <button (click)="toggleLogin()">Logout</button>
-    </div>
-    <div *ngIf="!isLoggedIn">
+    } @else {
       <p class="warning">Please log in to continue</p>
       <button (click)="toggleLogin()">Login</button>
-    </div>
+    }
   </section>
 
   <!-- Exercise 2: Replace *ngIf with else clause -->
