@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 interface Product {
   id: number;
@@ -16,7 +15,7 @@ interface User {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [], // No CommonModule needed!
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -62,7 +61,6 @@ export class AppComponent {
     this.currentUser.role = role;
   }
 
-  trackByProductId(index: number, product: Product): number {
-    return product.id;
-  }
+  // trackBy function is no longer needed with new syntax!
+  // The track expression is inline in the template
 }
