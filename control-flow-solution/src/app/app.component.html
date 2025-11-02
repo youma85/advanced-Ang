@@ -13,20 +13,19 @@
     }
   </section>
 
-  <!-- Exercise 2: Replace *ngIf with else clause -->
+  <!-- Exercise 2: @if with @else (no ng-template needed) -->
   <section class="section">
     <h2>Details Panel</h2>
     <button (click)="toggleDetails()">Toggle Details</button>
-    <div *ngIf="showDetails; else noDetails">
+    @if (showDetails) {
       <div class="details-panel">
         <h3>Product Information</h3>
         <p>This panel contains detailed product information.</p>
         <p>You can add more content here.</p>
       </div>
-    </div>
-    <ng-template #noDetails>
+    } @else {
       <p class="muted">Click the button to show details</p>
-    </ng-template>
+    }
   </section>
 
   <!-- Exercise 3: Replace *ngFor with @for -->
