@@ -63,7 +63,7 @@
     </div>
   </section>
 
-  <!-- Exercise 5: Replace *ngSwitch with @switch -->
+  <!-- Exercise 5: @switch with @case and @default -->
   <section class="section">
     <h2>User Role Dashboard</h2>
     <div class="role-switcher">
@@ -72,32 +72,40 @@
       <button (click)="changeUserRole('guest')">Guest</button>
     </div>
 
-    <div class="role-panel" [ngSwitch]="currentUser.role">
-      <div *ngSwitchCase="'admin'" class="admin-panel">
-        <h3>Admin Dashboard</h3>
-        <p>You have full access to all features.</p>
-        <ul>
-          <li>Manage Users</li>
-          <li>View Reports</li>
-          <li>System Settings</li>
-        </ul>
-      </div>
-      <div *ngSwitchCase="'user'" class="user-panel">
-        <h3>User Dashboard</h3>
-        <p>Welcome! You have standard access.</p>
-        <ul>
-          <li>View Profile</li>
-          <li>Edit Settings</li>
-        </ul>
-      </div>
-      <div *ngSwitchCase="'guest'" class="guest-panel">
-        <h3>Guest Access</h3>
-        <p>You have limited access. Please register for more features.</p>
-      </div>
-      <div *ngSwitchDefault>
-        <p>Unknown role</p>
-      </div>
-    </div>
+    @switch (currentUser.role) {
+      @case ('admin') {
+        <div class="role-panel admin-panel">
+          <h3>Admin Dashboard</h3>
+          <p>You have full access to all features.</p>
+          <ul>
+            <li>Manage Users</li>
+            <li>View Reports</li>
+            <li>System Settings</li>
+          </ul>
+        </div>
+      }
+      @case ('user') {
+        <div class="role-panel user-panel">
+          <h3>User Dashboard</h3>
+          <p>Welcome! You have standard access.</p>
+          <ul>
+            <li>View Profile</li>
+            <li>Edit Settings</li>
+          </ul>
+        </div>
+      }
+      @case ('guest') {
+        <div class="role-panel guest-panel">
+          <h3>Guest Access</h3>
+          <p>You have limited access. Please register for more features.</p>
+        </div>
+      }
+      @default {
+        <div class="role-panel">
+          <p>Unknown role</p>
+        </div>
+      }
+    }
   </section>
 
   <!-- Exercise 6: Nested *ngIf and *ngFor -->
