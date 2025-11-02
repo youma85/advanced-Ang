@@ -28,19 +28,23 @@
     }
   </section>
 
-  <!-- Exercise 3: Replace *ngFor with @for -->
+  <!-- Exercise 3: @for with track -->
   <section class="section">
     <h2>Product List</h2>
     <div class="product-grid">
-      <div *ngFor="let product of products; let i = index; trackBy: trackByProductId"
-           class="product-card">
-        <h3>{{ product.name }}</h3>
-        <p class="price">${{ product.price }}</p>
-        <p *ngIf="product.inStock" class="in-stock">In Stock</p>
-        <p *ngIf="!product.inStock" class="out-of-stock">Out of Stock</p>
-        <p class="index">Item #{{ i + 1 }}</p>
-        <button (click)="removeProduct(product.id)" class="remove-btn">Remove</button>
-      </div>
+      @for (product of products; track product.id; let i = $index) {
+        <div class="product-card">
+          <h3>{{ product.name }}</h3>
+          <p class="price">${{ product.price }}</p>
+          @if (product.inStock) {
+            <p class="in-stock">In Stock</p>
+          } @else {
+            <p class="out-of-stock">Out of Stock</p>
+          }
+          <p class="index">Item #{{ i + 1 }}</p>
+          <button (click)="removeProduct(product.id)" class="remove-btn">Remove</button>
+        </div>
+      }
     </div>
   </section>
 
