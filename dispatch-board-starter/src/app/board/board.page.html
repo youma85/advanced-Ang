@@ -1,0 +1,23 @@
+<div class="board-container">
+  <h2>Board — empty</h2>
+
+  <p class="info-text">
+    This is a placeholder. You will implement the board functionality here.
+  </p>
+
+  <!-- TODO: Replace this placeholder with actual board implementation -->
+  <!-- TODO: Display loading state when fetching data -->
+  <!-- TODO: Display error state if fetch fails -->
+  <!-- TODO: Display list of journeys when data is loaded -->
+  <!-- TODO: Implement @defer for heavy views (e.g., detailed journey list) -->
+
+  <!-- Example navigation to journey detail -->
+  <div class="actions">
+    <a routerLink="/board/journey/1" class="btn-link">
+      View Journey #1 (example)
+    </a>
+  </div>
+
+  <!-- Nested router outlet for child routes (/board/journey/:id) -->
+  <router-outlet></router-outlet>
+</div>
