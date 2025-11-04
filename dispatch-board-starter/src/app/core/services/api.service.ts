@@ -61,4 +61,13 @@ export class ApiService {
 
     return this.http.get<Vehicle[]>(url);
   }
+
+  /**
+   * Update a journey (PATCH)
+   * Used to update journey properties like assignedVehicleId
+   */
+  updateJourney(journeyId: number, updates: Partial<Journey>): Observable<Journey> {
+    const url = `${this.API_URL}/journeys/${journeyId}`;
+    return this.http.patch<Journey>(url, updates);
+  }
 }

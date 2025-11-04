@@ -106,4 +106,39 @@ export class BoardStore {
       }
     });
   }
+
+  /**
+   * Exercise C: Immutable State Updates
+   *
+   * Assign a vehicle to a journey with immutable state updates.
+   * Uses update() method on signals to ensure reactivity.
+   * Persists the change to the API via PATCH request.
+   *
+   * @param journeyId - The ID of the journey to update
+   * @param vehicleId - The ID of the vehicle to assign
+   */
+  assignVehicle(journeyId: number, vehicleId: number): void {
+    // Update the local state immediately (optimistic update)
+    this._journeys.update(currentJourneys => {
+      // Create a new array with the updated journey (immutable)
+      return currentJourneys.map(journey =>
+        journey.id === journeyId
+          ? { ...journey, assignedVehicleId: vehicleId }
+          : journey
+      );
+    });
+
+    // Persist the change to the API
+    this.apiService.updateJourney(journeyId, { assignedVehicleId: vehicleId }).subscribe({
+      next: (updatedJourney) => {
+        console.log('Journey updated successfully:', updatedJourney);
+      },
+      error: (err) => {
+        console.error('Error updating journey:', err);
+        // Optionally: revert the optimistic update on error
+        // For now, we keep the local change even if API fails
+        this._error.set(err.message || 'Failed to assign vehicle');
+      }
+    });
+  }
 }
