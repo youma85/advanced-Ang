@@ -33,8 +33,44 @@
                 <p>Status: <span class="status-badge scheduled">{{ journey.status }}</span></p>
                 <p>Start: {{ journey.startTime }}</p>
                 <p>End: {{ journey.endTime }}</p>
-                <p>Assigned Vehicle: {{ journey.assignedVehicleId || 'None' }}</p>
-                <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
+
+                <!-- Vehicle Assignment Dropdown (Exercise C) -->
+                <div class="vehicle-assignment">
+                  <label for="vehicle-{{ journey.id }}">Assign Vehicle:</label>
+                  <select
+                    id="vehicle-{{ journey.id }}"
+                    [value]="journey.assignedVehicleId?.toString() || ''"
+                    (change)="assignVehicle(journey.id, +$any($event.target).value)"
+                    class="vehicle-select"
+                  >
+                    <option value="">-- No Vehicle --</option>
+                    @for (vehicle of vehicles(); track vehicle.id) {
+                      <option [value]="vehicle.id.toString()">
+                        Vehicle #{{ vehicle.number }} (Capacity: {{ vehicle.capacity }})
+                      </option>
+                    }
+                  </select>
+                  @if (journey.assignedVehicleId) {
+                    <p class="current-assignment">
+                      Currently assigned:
+                      @if (getVehicleById(journey.assignedVehicleId); as vehicle) {
+                        Vehicle #{{ vehicle.number }}
+                      }
+                    </p>
+                  }
+                </div>
+
+                <div class="action-buttons">
+                  <button
+                    class="btn-start"
+                    (click)="store.startJourney(journey.id)"
+                    [disabled]="!journey.assignedVehicleId"
+                    [title]="!journey.assignedVehicleId ? 'Please assign a vehicle before starting' : 'Start this journey'"
+                  >
+                    Start Journey
+                  </button>
+                  <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
+                </div>
               </div>
             }
           </div>
@@ -54,7 +90,69 @@
                 <p>Status: <span class="status-badge in-progress">{{ journey.status }}</span></p>
                 <p>Start: {{ journey.startTime }}</p>
                 <p>End: {{ journey.endTime }}</p>
-                <p>Assigned Vehicle: {{ journey.assignedVehicleId || 'None' }}</p>
+
+                <!-- Vehicle Assignment - Read Only for In Progress Journeys -->
+                <div class="vehicle-assignment">
+                  <p><strong>Assigned Vehicle:</strong>
+                    @if (journey.assignedVehicleId) {
+                      @if (getVehicleById(journey.assignedVehicleId); as vehicle) {
+                        Vehicle #{{ vehicle.number }} (Capacity: {{ vehicle.capacity }})
+                      } @else {
+                        Vehicle ID {{ journey.assignedVehicleId }}
+                      }
+                    } @else {
+                      <span class="no-vehicle">No vehicle assigned</span>
+                    }
+                  </p>
+                  <p class="info-note">Cannot modify vehicle while journey is in progress</p>
+                </div>
+
+                <div class="action-buttons">
+                  <button
+                    class="btn-finish"
+                    (click)="store.finishJourney(journey.id)"
+                    title="Mark this journey as finished"
+                  >
+                    Finish Journey
+                  </button>
+                  <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Finished Journeys Section -->
+      <section class="journey-section">
+        <h3>Finished Journeys ({{ finishedJourneys().length }})</h3>
+        @if (finishedJourneys().length === 0) {
+          <p class="empty-state">No finished journeys</p>
+        } @else {
+          <div class="journey-list">
+            @for (journey of finishedJourneys(); track journey.id) {
+              <div class="journey-card">
+                <h4>{{ journey.title }}</h4>
+                <p>Status: <span class="status-badge finished">{{ journey.status }}</span></p>
+                <p>Start: {{ journey.startTime }}</p>
+                <p>End: {{ journey.endTime }}</p>
+
+                <!-- Vehicle Assignment - Read Only for Finished Journeys -->
+                <div class="vehicle-assignment">
+                  <p><strong>Assigned Vehicle:</strong>
+                    @if (journey.assignedVehicleId) {
+                      @if (getVehicleById(journey.assignedVehicleId); as vehicle) {
+                        Vehicle #{{ vehicle.number }} (Capacity: {{ vehicle.capacity }})
+                      } @else {
+                        Vehicle ID {{ journey.assignedVehicleId }}
+                      }
+                    } @else {
+                      <span class="no-vehicle">No vehicle assigned</span>
+                    }
+                  </p>
+                  <p class="info-note">Journey completed - vehicle assignment locked</p>
+                </div>
+
                 <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
               </div>
             }

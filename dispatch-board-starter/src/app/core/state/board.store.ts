@@ -44,6 +44,11 @@ export class BoardStore {
     this._journeys().filter(journey => journey.status === 'InProgress')
   );
 
+  // Filter journeys by status 'Finished'
+  readonly finishedJourneys = computed(() =>
+    this._journeys().filter(journey => journey.status === 'Finished')
+  );
+
   // Get vehicles that are not assigned to any journey
   readonly availableVehicles = computed(() => {
     const assignedVehicleIds = this._journeys()
@@ -140,5 +145,48 @@ export class BoardStore {
         this._error.set(err.message || 'Failed to assign vehicle');
       }
     });
+  }
+
+  /**
+   * Update journey status
+   * Changes the status of a journey (Scheduled → InProgress → Finished)
+   *
+   * @param journeyId - The ID of the journey to update
+   * @param newStatus - The new status to set
+   */
+  updateJourneyStatus(journeyId: number, newStatus: 'Scheduled' | 'InProgress' | 'Finished'): void {
+    // Update the local state immediately (optimistic update)
+    this._journeys.update(currentJourneys => {
+      return currentJourneys.map(journey =>
+        journey.id === journeyId
+          ? { ...journey, status: newStatus }
+          : journey
+      );
+    });
+
+    // Persist the change to the API
+    this.apiService.updateJourney(journeyId, { status: newStatus }).subscribe({
+      next: (updatedJourney) => {
+        console.log('Journey status updated successfully:', updatedJourney);
+      },
+      error: (err) => {
+        console.error('Error updating journey status:', err);
+        this._error.set(err.message || 'Failed to update journey status');
+      }
+    });
+  }
+
+  /**
+   * Start a journey (Scheduled → InProgress)
+   */
+  startJourney(journeyId: number): void {
+    this.updateJourneyStatus(journeyId, 'InProgress');
+  }
+
+  /**
+   * Finish a journey (InProgress → Finished)
+   */
+  finishJourney(journeyId: number): void {
+    this.updateJourneyStatus(journeyId, 'Finished');
   }
 }
