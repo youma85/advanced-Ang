@@ -1,22 +1,86 @@
 <div class="board-container">
-  <h2>Board — empty</h2>
+  <h2>Dispatch Board</h2>
 
-  <p class="info-text">
-    This is a placeholder. You will implement the board functionality here.
-  </p>
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p>Loading journeys and vehicles...</p>
+    </div>
+  }
 
-  <!-- TODO: Replace this placeholder with actual board implementation -->
-  <!-- TODO: Display loading state when fetching data -->
-  <!-- TODO: Display error state if fetch fails -->
-  <!-- TODO: Display list of journeys when data is loaded -->
-  <!-- TODO: Implement @defer for heavy views (e.g., detailed journey list) -->
+  <!-- Error State -->
+  @if (error()) {
+    <div class="error-state">
+      <p class="error-message">Error: {{ error() }}</p>
+      <button (click)="store.loadJourneys(); store.loadVehicles()">Retry</button>
+    </div>
+  }
 
-  <!-- Example navigation to journey detail -->
-  <div class="actions">
-    <a routerLink="/board/journey/1" class="btn-link">
-      View Journey #1 (example)
-    </a>
-  </div>
+  <!-- Board Content -->
+  @if (!isLoading() && !error()) {
+    <div class="board-content">
+
+      <!-- Scheduled Journeys Section -->
+      <section class="journey-section">
+        <h3>Scheduled Journeys ({{ scheduledJourneys().length }})</h3>
+        @if (scheduledJourneys().length === 0) {
+          <p class="empty-state">No scheduled journeys</p>
+        } @else {
+          <div class="journey-list">
+            @for (journey of scheduledJourneys(); track journey.id) {
+              <div class="journey-card">
+                <h4>{{ journey.title }}</h4>
+                <p>Status: <span class="status-badge scheduled">{{ journey.status }}</span></p>
+                <p>Start: {{ journey.startTime }}</p>
+                <p>End: {{ journey.endTime }}</p>
+                <p>Assigned Vehicle: {{ journey.assignedVehicleId || 'None' }}</p>
+                <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- In Progress Journeys Section -->
+      <section class="journey-section">
+        <h3>In Progress Journeys ({{ inProgressJourneys().length }})</h3>
+        @if (inProgressJourneys().length === 0) {
+          <p class="empty-state">No journeys in progress</p>
+        } @else {
+          <div class="journey-list">
+            @for (journey of inProgressJourneys(); track journey.id) {
+              <div class="journey-card">
+                <h4>{{ journey.title }}</h4>
+                <p>Status: <span class="status-badge in-progress">{{ journey.status }}</span></p>
+                <p>Start: {{ journey.startTime }}</p>
+                <p>End: {{ journey.endTime }}</p>
+                <p>Assigned Vehicle: {{ journey.assignedVehicleId || 'None' }}</p>
+                <a [routerLink]="['/board/journey', journey.id]" class="btn-link">View Details</a>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Available Vehicles Section -->
+      <section class="vehicle-section">
+        <h3>Available Vehicles ({{ availableVehicles().length }})</h3>
+        @if (availableVehicles().length === 0) {
+          <p class="empty-state">No available vehicles</p>
+        } @else {
+          <div class="vehicle-list">
+            @for (vehicle of availableVehicles(); track vehicle.id) {
+              <div class="vehicle-card">
+                <p><strong>Vehicle #{{ vehicle.number }}</strong></p>
+                <p>Capacity: {{ vehicle.capacity }} passengers</p>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+    </div>
+  }
 
   <!-- Nested router outlet for child routes (/board/journey/:id) -->
   <router-outlet></router-outlet>

@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { BoardStore } from '../core/state/board.store';
 
 /**
  * Board page component - Standalone
  *
- * TODO: Implement signal-based store to manage journeys and vehicles
- * TODO: Add loading and error states using signals
- * TODO: Implement computed signals for derived data
- * TODO: Add effects to fetch data on component initialization
+ * Exercise B: Computed Signals & Effects
+ * - Inject the BoardStore
+ * - Use effect() to load data when component initializes
+ * - Display journeys grouped by status
+ * - Show loading and error states
  */
 @Component({
   selector: 'app-board-page',
@@ -18,24 +20,26 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 })
 export class BoardPageComponent {
 
-  // TODO: Replace this with a signal-based store
-  // Example:
-  // private store = inject(BoardStore);
-  // journeys = this.store.journeys;
-  // vehicles = this.store.vehicles;
-  // isLoading = this.store.isLoading;
-  // error = this.store.error;
+  // Inject the signal-based store
+  store = inject(BoardStore);
 
-  // TODO: Add a method to load data on initialization
-  // constructor() {
-  //   effect(() => {
-  //     // Load data when component initializes
-  //     this.store.loadJourneys();
-  //     this.store.loadVehicles();
-  //   });
-  // }
+  // Expose computed signals for the template
+  scheduledJourneys = this.store.scheduledJourneys;
+  inProgressJourneys = this.store.inProgressJourneys;
+  availableVehicles = this.store.availableVehicles;
+  isLoading = this.store.isLoading;
+  error = this.store.error;
 
-  // TODO: Add a method to assign a vehicle to a journey
+  constructor() {
+    // Use effect() to load data when component initializes
+    effect(() => {
+      // This effect runs once when the component is created
+      this.store.loadJourneys();
+      this.store.loadVehicles();
+    });
+  }
+
+  // TODO: Add a method to assign a vehicle to a journey (Exercise C)
   // assignVehicle(journeyId: number, vehicleId: number) {
   //   this.store.assignVehicle(journeyId, vehicleId);
   // }
