@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Journey } from '../models/journey.model';
 import { Vehicle } from '../models/vehicle.model';
@@ -26,6 +26,34 @@ export class BoardStore {
   readonly vehicles = this._vehicles.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
+
+  /**
+   * Exercise B: Computed Signals
+   *
+   * These computed signals derive data from the base signals.
+   * They automatically update when their dependencies change.
+   */
+
+  // Filter journeys by status 'Scheduled'
+  readonly scheduledJourneys = computed(() =>
+    this._journeys().filter(journey => journey.status === 'Scheduled')
+  );
+
+  // Filter journeys by status 'InProgress'
+  readonly inProgressJourneys = computed(() =>
+    this._journeys().filter(journey => journey.status === 'InProgress')
+  );
+
+  // Get vehicles that are not assigned to any journey
+  readonly availableVehicles = computed(() => {
+    const assignedVehicleIds = this._journeys()
+      .map(journey => journey.assignedVehicleId)
+      .filter((id): id is number => id !== null);
+
+    return this._vehicles().filter(
+      vehicle => !assignedVehicleIds.includes(vehicle.id)
+    );
+  });
 
   /**
    * Load journeys from API
