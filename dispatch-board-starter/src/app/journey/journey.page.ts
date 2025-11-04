@@ -1,32 +1,38 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { BoardStore } from '../core/state/board.store';
 
 /**
  * Journey detail page component - Standalone
- * Uses route parameter binding via @Input()
  *
- * TODO: Convert the @Input() to use input signals (Angular 20 feature)
- * TODO: Use computed signals to derive journey details from the ID
- * TODO: Fetch journey details from the store based on the ID
+ * Exercise D: Route → Input Signal Binding
+ * - Uses input signal for route parameter binding
+ * - Uses computed signal to derive journey details from the store
  */
 @Component({
   selector: 'app-journey-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './journey.page.html',
   styleUrls: ['./journey.page.css']
 })
 export class JourneyPageComponent {
 
-  // Route parameter binding - receives 'id' from /board/journey/:id
-  @Input() id!: string;
+  // Inject the store
+  private store = inject(BoardStore);
 
-  // TODO: Replace with input signal
-  // Example:
-  // id = input.required<string>();
-  //
-  // Then create a computed signal for journey details:
-  // private store = inject(BoardStore);
-  // journey = computed(() => {
-  //   const journeyId = Number(this.id());
-  //   return this.store.journeys().find(j => j.id === journeyId);
-  // });
+  // Route parameter binding using input signal - receives 'id' from /board/journey/:id
+  id = input.required<string>();
+
+  // Computed signal to get journey details from the store
+  journey = computed(() => {
+    const journeyId = Number(this.id());
+    return this.store.journeys().find(j => j.id === journeyId);
+  });
+
+  // Helper to get vehicle details
+  getVehicle(vehicleId: number | null) {
+    if (!vehicleId) return null;
+    return this.store.vehicles().find(v => v.id === vehicleId);
+  }
 }

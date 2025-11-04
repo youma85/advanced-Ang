@@ -1,21 +1,94 @@
 <div class="journey-detail">
-  <h3>Journey Details — ID: {{ id }}</h3>
+  <h2>Journey Details</h2>
 
-  <p class="info-text">
-    This is a placeholder for journey detail view.
-  </p>
+  <!-- Journey Not Found -->
+  @if (!journey()) {
+    <div class="error-state">
+      <p class="error-message">Journey with ID {{ id() }} not found</p>
+      <p>Please check the journey ID or return to the board.</p>
+      <a routerLink="/board" class="btn-link">← Back to Board</a>
+    </div>
+  }
 
-  <!-- TODO: Replace with actual journey details from the store -->
-  <!-- TODO: Use input signals instead of @Input() -->
-  <!-- TODO: Display journey information (title, times, status, assigned vehicle) -->
-  <!-- TODO: Add ability to assign/reassign vehicles -->
+  <!-- Journey Details -->
+  @if (journey(); as journeyData) {
+    <div class="journey-content">
 
-  <div class="placeholder-content">
-    <p>Route parameter (id): <strong>{{ id }}</strong></p>
-    <p>
-      <em>
-        Implement signal-based route parameter binding and fetch journey details from the store.
-      </em>
-    </p>
-  </div>
+      <!-- Header Section -->
+      <div class="journey-header">
+        <h3>{{ journeyData.title }}</h3>
+        <span class="status-badge" [class]="journeyData.status.toLowerCase()">
+          {{ journeyData.status }}
+        </span>
+      </div>
+
+      <!-- Journey Information -->
+      <div class="journey-info">
+        <div class="info-group">
+          <label>Journey ID:</label>
+          <span>{{ journeyData.id }}</span>
+        </div>
+
+        <div class="info-group">
+          <label>Status:</label>
+          <span class="status-value">{{ journeyData.status }}</span>
+        </div>
+
+        <div class="info-group">
+          <label>Start Time:</label>
+          <span>{{ journeyData.startTime }}</span>
+        </div>
+
+        <div class="info-group">
+          <label>End Time:</label>
+          <span>{{ journeyData.endTime }}</span>
+        </div>
+
+        <div class="info-group">
+          <label>Assigned Vehicle:</label>
+          @if (journeyData.assignedVehicleId) {
+            @if (getVehicle(journeyData.assignedVehicleId); as vehicle) {
+              <span class="vehicle-info">
+                Vehicle #{{ vehicle.number }} (Capacity: {{ vehicle.capacity }} passengers)
+              </span>
+            } @else {
+              <span>Vehicle ID {{ journeyData.assignedVehicleId }} (Details not available)</span>
+            }
+          } @else {
+            <span class="no-vehicle">No vehicle assigned</span>
+          }
+        </div>
+      </div>
+
+      <!-- Status-specific information -->
+      <div class="status-info">
+        @if (journeyData.status === 'Scheduled') {
+          <div class="info-note scheduled-note">
+            <p><strong>📅 Scheduled Journey</strong></p>
+            <p>This journey is scheduled and waiting to start. You can modify the vehicle assignment from the board.</p>
+          </div>
+        }
+
+        @if (journeyData.status === 'InProgress') {
+          <div class="info-note inprogress-note">
+            <p><strong>🚌 Journey In Progress</strong></p>
+            <p>This journey is currently active. The vehicle assignment cannot be changed while the journey is in progress.</p>
+          </div>
+        }
+
+        @if (journeyData.status === 'Finished') {
+          <div class="info-note finished-note">
+            <p><strong>✅ Journey Completed</strong></p>
+            <p>This journey has been completed. All information is locked for record keeping.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="journey-actions">
+        <a routerLink="/board" class="btn-link">← Back to Board</a>
+      </div>
+
+    </div>
+  }
 </div>
