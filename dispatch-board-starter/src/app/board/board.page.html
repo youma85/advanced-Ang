@@ -160,6 +160,26 @@
         }
       </section>
 
+      <!-- Exercise E: @defer for Heavy Views -->
+      <!-- This section uses @defer to lazy-load the detailed journey list component -->
+      <!-- It only loads when the user scrolls it into view -->
+      @defer (on viewport) {
+        <app-journey-list-detail />
+      } @loading (minimum 500ms) {
+        <div class="loading-defer">
+          <p>Loading detailed journey view...</p>
+          <div class="spinner"></div>
+        </div>
+      } @error {
+        <div class="error-defer">
+          <p>Failed to load detailed view</p>
+        </div>
+      } @placeholder (minimum 1000ms) {
+        <div class="placeholder-defer">
+          <p>Scroll down to see detailed journey overview</p>
+        </div>
+      }
+
       <!-- Available Vehicles Section -->
       <section class="vehicle-section">
         <h3>Available Vehicles ({{ availableVehicles().length }})</h3>

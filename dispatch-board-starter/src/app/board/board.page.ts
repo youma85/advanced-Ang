@@ -1,6 +1,7 @@
 import { Component, inject, effect } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { BoardStore } from '../core/state/board.store';
+import { JourneyListDetailComponent } from './journey-list-detail.component';
 
 /**
  * Board page component - Standalone
@@ -10,11 +11,14 @@ import { BoardStore } from '../core/state/board.store';
  * - Use effect() to load data when component initializes
  * - Display journeys grouped by status
  * - Show loading and error states
+ *
+ * Exercise E: @defer for Heavy Views
+ * - Uses @defer to lazy-load JourneyListDetailComponent
  */
 @Component({
   selector: 'app-board-page',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, JourneyListDetailComponent],
   templateUrl: './board.page.html',
   styleUrls: ['./board.page.css']
 })

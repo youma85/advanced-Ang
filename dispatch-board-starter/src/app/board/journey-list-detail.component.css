@@ -1,0 +1,141 @@
+.journey-list-detail-container {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.journey-list-detail-container h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.subtitle {
+  margin: 0 0 1.5rem 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.detailed-journey-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background: #34495e;
+  color: white;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr:hover {
+  background: #f8f9fa;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.journey-title {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.scheduled {
+  background: #3498db;
+  color: white;
+}
+
+.status-badge.inprogress {
+  background: #f39c12;
+  color: white;
+}
+
+.status-badge.finished {
+  background: #2ecc71;
+  color: white;
+}
+
+.no-vehicle {
+  color: #95a5a6;
+  font-style: italic;
+}
+
+.btn-link-small {
+  padding: 0.25rem 0.75rem;
+  background: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  transition: background 0.3s;
+}
+
+.btn-link-small:hover {
+  background: #2980b9;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 150px;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #95a5a6;
+}

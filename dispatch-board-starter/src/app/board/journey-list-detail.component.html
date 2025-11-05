@@ -1,0 +1,88 @@
+<div class="journey-list-detail-container">
+  <h3>📋 Detailed Journey Overview</h3>
+  <p class="subtitle">Complete information about all journeys in the system</p>
+
+  @if (journeys().length === 0) {
+    <div class="empty-state">
+      <p>No journeys available</p>
+    </div>
+  } @else {
+    <div class="detailed-journey-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Assigned Vehicle</th>
+            <th>Vehicle Capacity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (journey of journeys(); track journey.id) {
+            <tr>
+              <td>{{ journey.id }}</td>
+              <td class="journey-title">{{ journey.title }}</td>
+              <td>
+                <span class="status-badge" [class]="getStatusClass(journey.status)">
+                  {{ journey.status }}
+                </span>
+              </td>
+              <td>{{ journey.startTime }}</td>
+              <td>{{ journey.endTime }}</td>
+              <td>
+                @if (journey.assignedVehicleId) {
+                  @if (getVehicleById(journey.assignedVehicleId); as vehicle) {
+                    Vehicle #{{ vehicle.number }}
+                  } @else {
+                    ID {{ journey.assignedVehicleId }}
+                  }
+                } @else {
+                  <span class="no-vehicle">None</span>
+                }
+              </td>
+              <td>
+                @if (journey.assignedVehicleId) {
+                  @if (getVehicleById(journey.assignedVehicleId); as vehicle) {
+                    {{ vehicle.capacity }} passengers
+                  } @else {
+                    -
+                  }
+                } @else {
+                  -
+                }
+              </td>
+              <td>
+                <a [routerLink]="['/board/journey', journey.id]" class="btn-link-small">
+                  View
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="summary-stats">
+        <div class="stat-card">
+          <span class="stat-label">Total Journeys:</span>
+          <span class="stat-value">{{ journeys().length }}</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Scheduled:</span>
+          <span class="stat-value">{{ store.scheduledJourneys().length }}</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">In Progress:</span>
+          <span class="stat-value">{{ store.inProgressJourneys().length }}</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Finished:</span>
+          <span class="stat-value">{{ store.finishedJourneys().length }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
